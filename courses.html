@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Courses — Snow Tech</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    .courses-page{padding:70px 20px;background:#F0F8FF;}
+    body.dark-theme .courses-page{background:#101A25;}
+
+    /* Filter bar */
+    .filter-bar{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:50px;}
+    .filter-btn{background:transparent;color:#1A2B40;border:3px solid #ADD8E6;border-radius:30px;padding:10px 28px;font-family:'Poppins',sans-serif;font-weight:600;font-size:1em;cursor:pointer;transition:background .3s,color .3s,border-color .3s,transform .3s;}
+    .filter-btn:hover,.filter-btn.active{background:#1A2B40;color:#FFD700;border-color:#FFD700;transform:translateY(-4px);}
+    body.dark-theme .filter-btn{color:#E0E0E0;border-color:#4A5C70;}
+    body.dark-theme .filter-btn:hover,body.dark-theme .filter-btn.active{background:#2A3C50;color:#FFD700;border-color:#FFD700;}
+
+    /* Course grid */
+    .course-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:40px;max-width:1200px;margin:0 auto;}
+    .course-card{background:#fff;border-radius:30px;padding:30px;border:5px dashed #FFD700;box-shadow:0 12px 25px rgba(0,0,0,.2);position:relative;overflow:hidden;opacity:0;transform:translateY(30px);transition:transform .4s cubic-bezier(0.68,-0.55,0.265,1.55),box-shadow .4s,opacity .8s;}
+    .course-card.is-visible{opacity:1;transform:translateY(0);}
+    .course-card::before{content:attr(data-icon);position:absolute;bottom:-10px;right:-5px;font-size:70px;opacity:.15;transform:rotate(-15deg);}
+    .course-card:hover{transform:scale(1.06) translateY(-12px);box-shadow:0 25px 45px rgba(0,0,0,.4);}
+    body.dark-theme .course-card{background:#2A3C50;border-color:#4A5C70;}
+    .course-icon{font-size:3em;margin-bottom:15px;display:block;}
+    .course-badge{display:inline-block;background:#ADD8E6;color:#1A2B40;font-family:'Inter',sans-serif;font-weight:600;font-size:.75em;border-radius:20px;padding:4px 14px;margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em;}
+    body.dark-theme .course-badge{background:#3A4B5C;color:#87CEEB;}
+    .course-card h3{font-family:'Poppins',sans-serif;font-weight:700;font-size:1.8em;color:#1A2B40;margin-bottom:12px;}
+    body.dark-theme .course-card h3{color:#F8F8F8;}
+    .course-card p{font-family:'Inter',sans-serif;font-size:1.05em;color:#555;line-height:1.7;margin-bottom:20px;}
+    body.dark-theme .course-card p{color:#E0E0E0;}
+    .course-meta{display:flex;gap:15px;flex-wrap:wrap;margin-bottom:20px;}
+    .course-meta span{font-family:'Inter',sans-serif;font-size:.85em;color:#888;display:flex;align-items:center;gap:5px;}
+    body.dark-theme .course-meta span{color:#aaa;}
+    .course-meta i{color:#FFD700;}
+    .enroll-btn{display:inline-block;background:#FFD700;color:#1A2B40;font-family:'Poppins',sans-serif;font-weight:700;font-size:1em;padding:12px 28px;border-radius:30px;text-decoration:none;border:none;cursor:pointer;transition:background .3s,transform .3s,box-shadow .3s;box-shadow:0 5px 15px rgba(0,0,0,.2);}
+    .enroll-btn:hover{background:#FFA500;transform:translateY(-4px);box-shadow:0 10px 25px rgba(0,0,0,.35);}
+
+    /* Category headings */
+    .category-heading{text-align:center;padding:40px 20px 10px;background:#F0F8FF;}
+    body.dark-theme .category-heading{background:#101A25;}
+    .cat-title{font-family:'Poppins',sans-serif;font-weight:700;font-size:2.5em;color:#1A2B40;border-bottom:5px solid #ADD8E6;display:inline-block;padding-bottom:8px;}
+    body.dark-theme .cat-title{color:#87CEEB;border-bottom-color:#3A4B5C;}
+
+    /* Enroll modal */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:3000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
+    .modal-overlay.open{opacity:1;pointer-events:all;}
+    .modal-box{background:#fff;border-radius:25px;padding:35px;max-width:460px;width:100%;position:relative;border:5px solid #ADD8E6;box-shadow:0 20px 50px rgba(0,0,0,.4);transform:translateY(30px);transition:transform .3s;}
+    .modal-overlay.open .modal-box{transform:translateY(0);}
+    body.dark-theme .modal-box{background:#2A3C50;border-color:#4A5C70;}
+    .modal-close{position:absolute;top:15px;right:20px;background:none;border:none;font-size:1.8em;color:#888;cursor:pointer;transition:color .3s,transform .3s;}
+    .modal-close:hover{color:#FFD700;transform:rotate(90deg);}
+    .modal-box h2{font-family:'Poppins',sans-serif;font-weight:700;font-size:1.8em;color:#1A2B40;margin-bottom:8px;}
+    body.dark-theme .modal-box h2{color:#F8F8F8;}
+    .modal-box p{font-family:'Inter',sans-serif;color:#666;margin-bottom:20px;font-size:.95em;}
+    body.dark-theme .modal-box p{color:#aaa;}
+    .form-group{margin-bottom:15px;}
+    .form-group label{display:block;font-family:'Inter',sans-serif;font-weight:600;font-size:.85em;color:#1A2B40;margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em;}
+    body.dark-theme .form-group label{color:#87CEEB;}
+    .form-group input,.form-group textarea{width:100%;padding:12px 15px;border:2px solid #ADD8E6;border-radius:12px;font-family:'Inter',sans-serif;font-size:1em;color:#333;background:#F0F8FF;outline:none;transition:border-color .3s;}
+    .form-group input:focus,.form-group textarea:focus{border-color:#FFD700;}
+    body.dark-theme .form-group input,body.dark-theme .form-group textarea{background:#1A2B40;border-color:#4A5C70;color:#F8F8F8;}
+    .form-group textarea{resize:vertical;min-height:80px;}
+    .modal-submit{width:100%;background:#FFD700;color:#1A2B40;border:none;border-radius:30px;padding:14px;font-family:'Poppins',sans-serif;font-weight:700;font-size:1.1em;cursor:pointer;transition:background .3s,transform .3s;}
+    .modal-submit:hover{background:#FFA500;transform:translateY(-3px);}
+    .modal-feedback{margin-top:10px;font-family:'Inter',sans-serif;font-size:.9em;min-height:1em;}
+    .modal-feedback.success{color:#2E8B57;} .modal-feedback.error{color:#cc2222;}
+
+    @media(max-width:768px){
+      .course-grid{grid-template-columns:1fr;}
+      .course-card h3{font-size:1.5em;}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="character-blob blob-1"></div>
+  <div class="character-blob blob-2"></div>
+  <div class="character-blob blob-3"></div>
+  <div class="header-blob blob-4"></div>
+  <div class="header-blob blob-5"></div>
+
+  <div id="header-placeholder"></div>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <h1><i class="fas fa-graduation-cap"></i> Our Courses</h1>
+    <p>Industry-aligned programs taught by working professionals. Find your path and start creating.</p>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="courses-page" style="padding-bottom:0">
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">All Courses</button>
+      <button class="filter-btn" data-filter="design">🎨 Design</button>
+      <button class="filter-btn" data-filter="animation">🎬 Animation</button>
+      <button class="filter-btn" data-filter="tech">💻 Technology</button>
+    </div>
+  </div>
+
+  <!-- DESIGN COURSES -->
+  <div class="category-heading" id="design"><span class="cat-title">🎨 Design Courses</span></div>
+  <section class="courses-page" style="padding-top:30px">
+    <div class="course-grid" id="designGrid">
+      <div class="course-card" data-cat="design" data-icon="🎨" id="digital-art">
+        <span class="course-icon">🎨</span>
+        <span class="course-badge">Design</span>
+        <h3>Digital Art Fundamentals</h3>
+        <p>Master core principles of digital illustration — from pen pressure to color theory. Build a portfolio ready for real clients.</p>
+        <div class="course-meta">
+          <span><i class="fas fa-clock"></i> 3 Months</span>
+          <span><i class="fas fa-signal"></i> Beginner → Pro</span>
+        </div>
+        <button class="enroll-btn" onclick="openEnroll('Digital Art Fundamentals')">Enroll Now <i class="fas fa-arrow-right"></i></button>
+      </div>
+      <div class="course-card" data-cat="design" data-icon="✏️" id="ui-ux">
+        <span class="course-icon">✏️</span>
+        <span class="course-badge">Design</span>
+        <h3>UI/UX Design</h3>
+        <p>Design products people love. Learn user research, wireframing, prototyping, and developer handoff using industry tools.</p>
+        <div class="course-meta">
+          <span><i class="fas fa-clock"></i> 4 Months</span>
+          <span><i class="fas fa-signal"></i> Beginner Friendly</span>
+        </div>
+        <button class="enroll-btn" onclick="openEnroll('UI/UX Design')">Enroll Now <i class="fas fa-arrow-right"></i></button>
+      </div>
+      <div class="course-card" data-cat="design" data-icon="🖼️">
+        <span class="course-icon">🖼️</span>
+        <span class="course-badge">Design</span>
+        <h3>Graphic Design Pro</h3>
+        <p>Create stunning visuals for print and digital media. Master typography, layout, branding, and Adobe Creative Suite.</p>
+        <div class="course-meta">
+          <span><i class="fas fa-clock"></i> 3 Months</span>
+          <span><i class="fas fa-signal"></i> All Levels</span>
+        </div>
+        <button class="enroll-btn" onclick="openEnroll('Graphic Design Pro')">Enroll Now <i class="fas fa-arrow-right"></i></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ANIMATION COURSES -->
+  <div class="category-heading" id="animation"><span class="cat-title">🎬 Animation Courses</span></div>
+  <section class="courses-page" style="padding-top:30px">
+    <div class="course-grid" id="animationGrid">
+      <div class="course-card" data-cat="animation" data-icon="🎬" id="3d">
+        <span class="course-icon">🎬</span>
+        <span class="course-badge">Animation</span>
+        <h3>3D Animation &amp; Rigging</h3>
+        <p>Go from static meshes to cinematic animation. Learn rigging, keyframing, and render pipelines used by studios worldwide.</p>
+        <div class="course-meta">
+          <span><i class="fas fa-clock"></i> 6 Months</span>
+          <span><i class="fas fa-signal"></i> Intermediate</span>
+        </div>
+        <button class="enroll-btn" onclick="openEnroll('3D Animation & Rigging')">Enroll Now <i class="fas fa-arrow-right"></i></button>
+      </div>
+      <div class="course-card" data-cat="animation" data-icon="⚡" id="motion">
+        <span class="course-icon">⚡</span>
+        <span class="course-badge">Animation</span>
+        <h3>Motion Graphics</h3>
+        <p>Craft broadcast-quality titles, logo animations, and social content. Master After Effects and Cinema 4D.</p>
+        <div class="course-meta">
+          <span><i class="fas fa-clock"></i> 3 Months</span>
+          <span><i class="fas fa-signal"></i> Intermediate</span>
+        </div>
+        <button class="enroll-btn" onclick="openEnroll('Motion Graphics')">Enroll Now <i class="fas fa-arrow-right"></i></button>
+      </div>
+      <div class="course-card" data-cat="animation" data-icon="🖌️">
+        <span class="course-icon">🖌️</span>
+        <span class="course-badge">Animation</span>
+        <h3>Cartoon Creation</h3>
+        <p>Create your own animated characters and short films. Learn frame-by-frame animation, character design, and storytelling.</p>
+        <div class="course-meta">
+          <span><i class="fas fa-clock"></i> 4 Months</span>
+          <span><i class="fas fa-signal"></i> All Levels</span>
+        </div>
+        <button class="enroll-btn" onclick="openEnroll('Cartoon Creation')">Enroll Now <i class="fas fa-arrow-right"></i></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TECH COURSES -->
+  <div class="category-heading" id="tech"><span class="cat-title">💻 Technology Courses</span></div>
+  <section class="courses-page" style="padding-top:30px">
+    <div class="course-grid" id="techGrid">
+      <div class="course-card" data-cat="tech" data-icon="💻" id="webdev">
+        <span class="course-icon">💻</span>
+        <span class="course-badge">Technology</span>
+        <h3>Full-Stack Web Development</h3>
+        <p>Build modern web apps from scratch. HTML/CSS, JavaScript, React, Node.js, and cloud deployment covered start to finish.</p>
+        <div class="course-meta">
+          <span><i class="fas fa-clock"></i> 6 Months</span>
+          <span><i class="fas fa-signal"></i> Beginner → Pro</span>
+        </div>
+        <button class="enroll-btn" onclick="openEnroll('Full-Stack Web Development')">Enroll Now <i class="fas fa-arrow-right"></i></button>
+      </div>
+      <div class="course-card" data-cat="tech" data-icon="🎮" id="game">
+        <span class="course-icon">🎮</span>
+        <span class="course-badge">Technology</span>
+        <h3>Game Design &amp; Development</h3>
+        <p>Design, prototype, and ship your own game. Learn game mechanics, level design, and Unity scripting from day one.</p>
+        <div class="course-meta">
+          <span><i class="fas fa-clock"></i> 5 Months</span>
+          <span><i class="fas fa-signal"></i> Beginner Friendly</span>
+        </div>
+        <button class="enroll-btn" onclick="openEnroll('Game Design & Development')">Enroll Now <i class="fas fa-arrow-right"></i></button>
+      </div>
+      <div class="course-card" data-cat="tech" data-icon="🛡️">
+        <span class="course-icon">🛡️</span>
+        <span class="course-badge">Technology</span>
+        <h3>Cyber Security Essentials</h3>
+        <p>Understand core cybersecurity principles, ethical hacking, and network defense to protect digital assets.</p>
+        <div class="course-meta">
+          <span><i class="fas fa-clock"></i> 4 Months</span>
+          <span><i class="fas fa-signal"></i> Intermediate</span>
+        </div>
+        <button class="enroll-btn" onclick="openEnroll('Cyber Security Essentials')">Enroll Now <i class="fas fa-arrow-right"></i></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENROLL MODAL -->
+  <div class="modal-overlay" id="enrollModal">
+    <div class="modal-box">
+      <button class="modal-close" id="modalClose">×</button>
+      <h2 id="modalTitle">Enroll Now</h2>
+      <p>Fill in your details and our team will contact you within 24 hours to confirm your seat.</p>
+      <div class="form-group"><label>Your Name</label><input type="text" id="enrollName" placeholder="Full name"/></div>
+      <div class="form-group"><label>Email</label><input type="email" id="enrollEmail" placeholder="you@email.com"/></div>
+      <div class="form-group"><label>Phone</label><input type="tel" id="enrollPhone" placeholder="+91 00000 00000"/></div>
+      <div class="form-group"><label>Message (optional)</label><textarea id="enrollMsg" placeholder="Any questions?"></textarea></div>
+      <button class="modal-submit" id="enrollSubmit">Send Enrollment Request <i class="fas fa-paper-plane"></i></button>
+      <div class="modal-feedback" id="modalFeedback"></div>
+    </div>
+  </div>
+
+  <div id="footer-placeholder"></div>
+  <script src="shared.js"></script>
+  <script>
+    // Filter
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const allCards = document.querySelectorAll('.course-card');
+    const categoryHeadings = document.querySelectorAll('.category-heading');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const f = btn.dataset.filter;
+        allCards.forEach(c => {
+          const match = f === 'all' || c.dataset.cat === f;
+          c.style.display = match ? '' : 'none';
+        });
+        categoryHeadings.forEach(h => {
+          const id = h.id;
+          if (f === 'all' || f === id) h.style.display = '';
+          else h.style.display = 'none';
+        });
+      });
+    });
+
+    // Scroll animation
+    const io = new IntersectionObserver(entries => entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+    }), { threshold: 0.1 });
+    allCards.forEach((c, i) => { c.style.transitionDelay = (i % 3 * 0.1) + 's'; io.observe(c); });
+
+    // Enroll modal
+    let selectedCourse = '';
+    function openEnroll(name) {
+      selectedCourse = name;
+      document.getElementById('modalTitle').textContent = 'Enroll: ' + name;
+      document.getElementById('modalFeedback').textContent = '';
+      document.getElementById('enrollModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    document.getElementById('modalClose').addEventListener('click', closeModal);
+    document.getElementById('enrollModal').addEventListener('click', e => { if(e.target.id==='enrollModal') closeModal(); });
+    function closeModal() {
+      document.getElementById('enrollModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.getElementById('enrollSubmit').addEventListener('click', () => {
+      const name  = document.getElementById('enrollName').value.trim();
+      const email = document.getElementById('enrollEmail').value.trim();
+      const fb    = document.getElementById('modalFeedback');
+      if (!name || !email) { fb.textContent = 'Please fill in name and email.'; fb.className = 'modal-feedback error'; return; }
+      fb.textContent = `✓ Request sent for "${selectedCourse}"! We'll contact you within 24 hours.`;
+      fb.className = 'modal-feedback success';
+      setTimeout(closeModal, 2000);
+    });
+  </script>
+</body>
+</html>

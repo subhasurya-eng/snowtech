@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us — Snow Tech</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    .contact-page{padding:70px 20px;background:#F0F8FF;}
+    body.dark-theme .contact-page{background:#101A25;}
+    .contact-page.alt{background:#E0FFFF;}
+    body.dark-theme .contact-page.alt{background:#0f1520;}
+
+    /* CONTACT FORM SECTION */
+    .contact-layout{display:grid;grid-template-columns:1fr 1.3fr;gap:60px;max-width:1100px;margin:0 auto;align-items:start;}
+    .contact-info-panel{}
+    .contact-info-panel h2{font-family:'Poppins',sans-serif;font-weight:700;font-size:2.8em;color:#1A2B40;margin-bottom:15px;text-shadow:2px 2px 0 #ADD8E6;}
+    body.dark-theme .contact-info-panel h2{color:#87CEEB;}
+    .contact-info-panel p{font-family:'Inter',sans-serif;font-size:1.05em;color:#555;line-height:1.75;margin-bottom:30px;}
+    body.dark-theme .contact-info-panel p{color:#E0E0E0;}
+    .ci-list{list-style:none;display:flex;flex-direction:column;gap:18px;}
+    .ci-list li{display:flex;align-items:flex-start;gap:14px;font-family:'Inter',sans-serif;font-size:1em;color:#444;}
+    body.dark-theme .ci-list li{color:#E0E0E0;}
+    .ci-icon{width:44px;height:44px;border-radius:50%;background:#1A2B40;display:flex;align-items:center;justify-content:center;color:#FFD700;font-size:1.1em;flex-shrink:0;box-shadow:0 4px 10px rgba(0,0,0,.2);}
+    .social-contact{display:flex;gap:15px;margin-top:30px;}
+    .social-contact a{width:44px;height:44px;border-radius:50%;background:#1A2B40;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.1em;transition:background .3s,transform .3s,filter .3s;}
+    .social-contact a:hover{background:#FFD700;color:#1A2B40;transform:scale(1.15) rotate(5deg);filter:drop-shadow(0 0 8px rgba(255,215,0,.6));}
+
+    /* FORM */
+    .contact-form-box{background:#fff;border-radius:25px;padding:40px;border:5px dashed #FFD700;box-shadow:0 15px 35px rgba(0,0,0,.15);opacity:0;transform:translateY(30px);transition:opacity .8s ease-out,transform .8s ease-out;}
+    .contact-form-box.is-visible{opacity:1;transform:translateY(0);}
+    body.dark-theme .contact-form-box{background:#2A3C50;border-color:#4A5C70;}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:15px;}
+    .form-group{margin-bottom:18px;}
+    .form-group label{display:block;font-family:'Inter',sans-serif;font-weight:600;font-size:.82em;color:#1A2B40;margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em;}
+    body.dark-theme .form-group label{color:#87CEEB;}
+    .form-group input,.form-group textarea,.form-group select{width:100%;padding:13px 15px;border:2px solid #ADD8E6;border-radius:12px;font-family:'Inter',sans-serif;font-size:1em;color:#333;background:#F0F8FF;outline:none;transition:border-color .3s,box-shadow .3s;}
+    .form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:#FFD700;box-shadow:0 0 0 3px rgba(255,215,0,.25);}
+    body.dark-theme .form-group input,body.dark-theme .form-group textarea,body.dark-theme .form-group select{background:#1A2B40;border-color:#4A5C70;color:#F8F8F8;}
+    .form-group textarea{resize:vertical;min-height:120px;}
+    .form-submit{width:100%;background:#FFD700;color:#1A2B40;border:none;border-radius:35px;padding:16px;font-family:'Poppins',sans-serif;font-weight:700;font-size:1.2em;cursor:pointer;transition:background .3s,transform .3s,box-shadow .3s;box-shadow:0 6px 20px rgba(0,0,0,.2);}
+    .form-submit:hover{background:#FFA500;transform:translateY(-4px);box-shadow:0 12px 30px rgba(0,0,0,.35);}
+    .form-feedback{margin-top:12px;font-family:'Inter',sans-serif;font-size:.9em;font-weight:600;min-height:1.2em;}
+    .form-feedback.success{color:#2E8B57;} .form-feedback.error{color:#cc2222;}
+
+    /* BRANCH CARDS */
+    .branches-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:35px;max-width:1200px;margin:0 auto;}
+    .branch-card{background:#fff;border-radius:25px;padding:30px;border:5px solid #ADD8E6;box-shadow:0 10px 25px rgba(0,0,0,.15);opacity:0;transform:translateY(30px);transition:transform .4s cubic-bezier(.68,-.55,.265,1.55),opacity .8s,box-shadow .3s;}
+    .branch-card.is-visible{opacity:1;transform:translateY(0);}
+    .branch-card:nth-child(1){transition-delay:.05s} .branch-card:nth-child(2){transition-delay:.1s}
+    .branch-card:nth-child(3){transition-delay:.15s} .branch-card:nth-child(4){transition-delay:.2s}
+    .branch-card:nth-child(5){transition-delay:.25s} .branch-card:nth-child(6){transition-delay:.3s}
+    .branch-card:hover{transform:translateY(-14px) scale(1.03);box-shadow:0 22px 45px rgba(0,0,0,.3);}
+    body.dark-theme .branch-card{background:#2A3C50;border-color:#4A5C70;}
+    .branch-card .b-icon{font-size:2.5em;margin-bottom:12px;}
+    .branch-card h3{font-family:'Poppins',sans-serif;font-weight:700;font-size:1.5em;color:#1A2B40;margin-bottom:12px;}
+    body.dark-theme .branch-card h3{color:#87CEEB;}
+    .branch-card p{font-family:'Inter',sans-serif;font-size:.95em;color:#555;line-height:1.6;margin-bottom:6px;}
+    body.dark-theme .branch-card p{color:#E0E0E0;}
+    .branch-card .b-phone{font-family:'Inter',sans-serif;font-size:.9em;color:#ADD8E6;font-weight:600;}
+    body.dark-theme .branch-card .b-phone{color:#87CEEB;}
+    .map-link{display:inline-block;margin-top:12px;color:#FFD700;font-family:'Inter',sans-serif;font-weight:600;font-size:.9em;text-decoration:none;transition:color .3s,transform .3s;}
+    .map-link:hover{color:#FFA500;transform:translateX(6px);}
+
+    /* MAP */
+    .map-wrap{max-width:1100px;margin:0 auto;border-radius:20px;overflow:hidden;border:6px solid #ADD8E6;box-shadow:0 15px 40px rgba(0,0,0,.2);opacity:0;transform:translateY(30px);transition:opacity .8s ease-out,transform .8s ease-out;}
+    .map-wrap.is-visible{opacity:1;transform:translateY(0);}
+    .map-wrap iframe{width:100%;height:450px;border:0;display:block;}
+
+    @media(max-width:768px){
+      .contact-layout{grid-template-columns:1fr;}
+      .form-row{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="character-blob blob-1"></div>
+  <div class="character-blob blob-2"></div>
+  <div class="character-blob blob-3"></div>
+  <div class="header-blob blob-4"></div>
+  <div class="header-blob blob-5"></div>
+
+  <div id="header-placeholder"></div>
+
+  <div class="page-hero">
+    <h1><i class="fas fa-envelope"></i> Contact Us</h1>
+    <p>Have a question, want to enroll, or just want to say hello? We'd love to hear from you!</p>
+  </div>
+
+  <!-- CONTACT FORM -->
+  <section class="contact-page">
+    <h2 class="section-title">Get In Touch</h2>
+    <div class="contact-layout">
+      <!-- Info Panel -->
+      <div class="contact-info-panel">
+        <h2>Let's talk about your future</h2>
+        <p>Our team is ready to help you find the right course and answer any questions. Reach out by form, phone, or visit us at any of our branches.</p>
+        <ul class="ci-list">
+          <li><div class="ci-icon"><i class="fas fa-map-marker-alt"></i></div><div><strong>Head Office</strong><br/>123 Snow Tech St, Tirunelveli, Tamil Nadu 627005</div></li>
+          <li><div class="ci-icon"><i class="fas fa-phone"></i></div><div><strong>Phone</strong><br/>+91 98765 43210</div></li>
+          <li><div class="ci-icon"><i class="fas fa-envelope"></i></div><div><strong>Email</strong><br/>hello@snowtech.in</div></li>
+          <li><div class="ci-icon"><i class="fas fa-clock"></i></div><div><strong>Hours</strong><br/>Mon–Sat 9am–7pm · Sun 10am–3pm</div></li>
+        </ul>
+        <div class="social-contact">
+          <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+          <a href="https://youtube.com" target="_blank"><i class="fab fa-youtube"></i></a>
+          <a href="https://linkedin.com" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="contact-form-box" id="contactFormBox">
+        <form id="contactForm" novalidate>
+          <div class="form-row">
+            <div class="form-group"><label>Your Name *</label><input type="text" id="cName" placeholder="Full name" required/></div>
+            <div class="form-group"><label>Email *</label><input type="email" id="cEmail" placeholder="you@email.com" required/></div>
+          </div>
+          <div class="form-group"><label>Phone</label><input type="tel" id="cPhone" placeholder="+91 00000 00000"/></div>
+          <div class="form-group">
+            <label>Interested In</label>
+            <select id="cCourse">
+              <option value="">— Select a course —</option>
+              <option>Digital Art Fundamentals</option>
+              <option>UI/UX Design</option>
+              <option>3D Animation & Rigging</option>
+              <option>Motion Graphics</option>
+              <option>Cartoon Creation</option>
+              <option>Full-Stack Web Development</option>
+              <option>Game Design & Development</option>
+              <option>Cyber Security Essentials</option>
+              <option>Other / General Inquiry</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Message *</label><textarea id="cMsg" placeholder="Tell us what's on your mind…" required></textarea></div>
+          <button type="submit" class="form-submit">Send Message <i class="fas fa-paper-plane"></i></button>
+          <div class="form-feedback" id="contactFeedback"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRANCHES -->
+  <section class="contact-page alt">
+    <h2 class="section-title">Our Branches</h2>
+    <div class="branches-grid">
+      <div class="branch-card" id="tirunelveli"><div class="b-icon">📍</div><h3>Tirunelveli</h3><p>48/5, S Bypass Rd, Xavier Colony, Vasanth Nagar, Tirunelveli 627005</p><p class="b-phone"><i class="fas fa-phone"></i> +91 98765 43210</p><a href="https://maps.google.com" class="map-link">View on Map <i class="fas fa-arrow-right"></i></a></div>
+      <div class="branch-card" id="madurai"><div class="b-icon">📍</div><h3>Madurai</h3><p>15, Anna Nagar, Madurai 625020</p><p class="b-phone"><i class="fas fa-phone"></i> +91 98765 43211</p><a href="https://maps.google.com" class="map-link">View on Map <i class="fas fa-arrow-right"></i></a></div>
+      <div class="branch-card" id="chennai"><div class="b-icon">📍</div><h3>Chennai – CIT Nagar</h3><p>42, CIT Nagar, Chennai 600035</p><p class="b-phone"><i class="fas fa-phone"></i> +91 98765 43212</p><a href="https://maps.google.com" class="map-link">View on Map <i class="fas fa-arrow-right"></i></a></div>
+      <div class="branch-card" id="coimbatore"><div class="b-icon">📍</div><h3>Coimbatore</h3><p>8, RS Puram, Coimbatore 641002</p><p class="b-phone"><i class="fas fa-phone"></i> +91 98765 43213</p><a href="https://maps.google.com" class="map-link">View on Map <i class="fas fa-arrow-right"></i></a></div>
+      <div class="branch-card" id="trichy"><div class="b-icon">📍</div><h3>Trichy</h3><p>23, Thillai Nagar, Trichy 620018</p><p class="b-phone"><i class="fas fa-phone"></i> +91 98765 43214</p><a href="https://maps.google.com" class="map-link">View on Map <i class="fas fa-arrow-right"></i></a></div>
+      <div class="branch-card"><div class="b-icon">🌟</div><h3>More Locations</h3><p>We're expanding! New branches opening soon in Virudhunagar, Theni, and Perambalur.</p><p class="b-phone"><i class="fas fa-info-circle"></i> Stay tuned</p><a href="#contactForm" class="map-link">Notify Me <i class="fas fa-arrow-right"></i></a></div>
+    </div>
+  </section>
+
+  <!-- MAP -->
+  <section class="contact-page" style="padding-bottom:60px">
+    <h2 class="section-title">Find Our Head Office</h2>
+    <div class="map-wrap" id="mapWrap">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3936.565985854721!2d77.69741097495574!3d8.71888429188094!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b04128f1173663b%3A0x92f9e4c1946c1a86!2sCastro%20Palace!5e0!3m2!1sen!2sin!4v1719420000000!5m2!1sen!2sin" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+  <script src="shared.js"></script>
+  <script>
+    // Scroll animations
+    const io = new IntersectionObserver(entries => entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+    }), { threshold: 0.1 });
+    document.querySelectorAll('.branch-card,.contact-form-box,#mapWrap').forEach(el => io.observe(el));
+
+    // Form submit
+    document.getElementById('contactForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const fb = document.getElementById('contactFeedback');
+      const name = document.getElementById('cName').value.trim();
+      const email = document.getElementById('cEmail').value.trim();
+      const msg = document.getElementById('cMsg').value.trim();
+      if (!name || !email || !msg) { fb.textContent = '⚠ Please fill in all required fields.'; fb.className = 'form-feedback error'; return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { fb.textContent = '⚠ Please enter a valid email.'; fb.className = 'form-feedback error'; return; }
+      const btn = e.target.querySelector('.form-submit');
+      btn.textContent = 'Sending…'; btn.disabled = true;
+      setTimeout(() => {
+        fb.textContent = '✓ Message sent! We\'ll get back to you within 24 hours.';
+        fb.className = 'form-feedback success';
+        e.target.reset();
+        btn.innerHTML = 'Send Message <i class="fas fa-paper-plane"></i>';
+        btn.disabled = false;
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

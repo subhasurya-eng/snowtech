@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us — Snow Tech</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="shared.css"/>
+  <style>
+    .about-section{padding:70px 20px;background:#F0F8FF;text-align:center;}
+    body.dark-theme .about-section{background:#101A25;}
+    .about-section.alt{background:#E0FFFF;}
+    body.dark-theme .about-section.alt{background:#0f1520;}
+
+    /* Overview */
+    .overview-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;max-width:1100px;margin:0 auto;align-items:center;text-align:left;}
+    .overview-text h2{font-family:'Poppins',sans-serif;font-weight:700;font-size:3em;color:#1A2B40;margin-bottom:20px;text-shadow:2px 2px 0 #ADD8E6;}
+    body.dark-theme .overview-text h2{color:#87CEEB;}
+    .overview-text p{font-family:'Inter',sans-serif;font-size:1.1em;color:#555;line-height:1.8;margin-bottom:18px;}
+    body.dark-theme .overview-text p{color:#E0E0E0;}
+    .overview-img{border-radius:20px;box-shadow:0 15px 40px rgba(0,0,0,.2);border:6px solid #FFD700;width:100%;height:320px;object-fit:cover;transform:rotate(2deg);transition:transform .3s;}
+    .overview-img:hover{transform:rotate(0deg) scale(1.02);}
+    .overview-img-placeholder{background:linear-gradient(135deg,#1A2B40,#2A3C50);border-radius:20px;border:6px solid #FFD700;width:100%;height:320px;display:flex;align-items:center;justify-content:center;font-size:5em;transform:rotate(2deg);transition:transform .3s;}
+    .overview-img-placeholder:hover{transform:rotate(0deg) scale(1.02);}
+
+    /* Stats */
+    .stats-row{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;max-width:900px;margin:0 auto 0;}
+    .stat-box{background:#fff;border:5px solid #ADD8E6;border-radius:20px;padding:30px 40px;text-align:center;box-shadow:0 8px 20px rgba(0,0,0,.12);opacity:0;transform:translateY(30px);transition:transform .4s cubic-bezier(.68,-.55,.265,1.55),opacity .8s;}
+    .stat-box.is-visible{opacity:1;transform:translateY(0);}
+    .stat-box:nth-child(1){transition-delay:.1s} .stat-box:nth-child(2){transition-delay:.2s} .stat-box:nth-child(3){transition-delay:.3s} .stat-box:nth-child(4){transition-delay:.4s}
+    .stat-box:hover{transform:translateY(-10px) scale(1.05);box-shadow:0 20px 40px rgba(0,0,0,.25);}
+    body.dark-theme .stat-box{background:#2A3C50;border-color:#4A5C70;}
+    .stat-number{font-family:'Poppins',sans-serif;font-weight:700;font-size:3em;color:#FFD700;text-shadow:2px 2px 0 rgba(0,0,0,.2);}
+    .stat-label{font-family:'Inter',sans-serif;font-size:1em;color:#555;margin-top:5px;}
+    body.dark-theme .stat-label{color:#E0E0E0;}
+
+    /* Mission & Vision */
+    .mv-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;max-width:1000px;margin:0 auto;}
+    .mv-card{background:#fff;border-radius:25px;padding:35px;border:5px solid #ADD8E6;box-shadow:0 10px 25px rgba(0,0,0,.15);opacity:0;transform:translateY(30px);transition:transform .4s cubic-bezier(.68,-.55,.265,1.55),opacity .8s;}
+    .mv-card.is-visible{opacity:1;transform:translateY(0);}
+    .mv-card:first-child{transition-delay:.1s} .mv-card:last-child{transition-delay:.2s}
+    .mv-card:hover{transform:translateY(-12px) rotate(1deg);box-shadow:0 20px 40px rgba(0,0,0,.3);}
+    body.dark-theme .mv-card{background:#2A3C50;border-color:#4A5C70;}
+    .mv-card .mv-icon{font-size:3.5em;margin-bottom:15px;}
+    .mv-card h3{font-family:'Poppins',sans-serif;font-weight:700;font-size:2em;color:#1A2B40;margin-bottom:15px;}
+    body.dark-theme .mv-card h3{color:#87CEEB;}
+    .mv-card p{font-family:'Inter',sans-serif;font-size:1.05em;color:#555;line-height:1.75;}
+    body.dark-theme .mv-card p{color:#E0E0E0;}
+
+    /* Pillars */
+    .pillars-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:30px;max-width:1100px;margin:0 auto;}
+    .pillar-box{background:#fff;border-radius:25px;padding:30px 20px;border:5px solid #FFD700;box-shadow:0 8px 20px rgba(0,0,0,.12);text-align:center;opacity:0;transform:translateY(30px);transition:transform .4s cubic-bezier(.68,-.55,.265,1.55),opacity .8s;}
+    .pillar-box.is-visible{opacity:1;transform:translateY(0);}
+    .pillar-box:nth-child(1){transition-delay:.05s} .pillar-box:nth-child(2){transition-delay:.10s}
+    .pillar-box:nth-child(3){transition-delay:.15s} .pillar-box:nth-child(4){transition-delay:.20s} .pillar-box:nth-child(5){transition-delay:.25s}
+    .pillar-box:hover{transform:translateY(-15px) rotate(2deg);box-shadow:0 20px 40px rgba(0,0,0,.3);}
+    body.dark-theme .pillar-box{background:#2A3C50;border-color:#4A5C70;}
+    .pillar-box .p-icon{font-size:3em;margin-bottom:15px;}
+    .pillar-box h3{font-family:'Poppins',sans-serif;font-weight:700;font-size:1.5em;color:#1A2B40;margin-bottom:10px;}
+    body.dark-theme .pillar-box h3{color:#F8F8F8;}
+    .pillar-box p{font-family:'Inter',sans-serif;font-size:.95em;color:#666;line-height:1.6;}
+    body.dark-theme .pillar-box p{color:#E0E0E0;}
+
+    /* Gallery */
+    .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px;max-width:1100px;margin:0 auto;}
+    .gallery-item{border-radius:15px;overflow:hidden;border:5px solid #ADD8E6;box-shadow:0 6px 15px rgba(0,0,0,.15);opacity:0;transform:scale(.9);transition:opacity .6s,transform .6s;}
+    .gallery-item.is-visible{opacity:1;transform:scale(1);}
+    .gallery-item:hover{transform:scale(1.05) rotate(1deg);}
+    .gallery-item div{width:100%;height:180px;display:flex;align-items:center;justify-content:center;font-size:3em;background:linear-gradient(135deg,#1A2B40,#2A3C50);}
+
+    /* Reviews */
+    .reviews-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px;max-width:1100px;margin:0 auto;}
+    .review-card{background:#fff;border-radius:25px;padding:30px;border:5px solid #ADD8E6;box-shadow:0 10px 25px rgba(0,0,0,.15);opacity:0;transform:translateY(30px);transition:transform .4s ease,opacity .8s,box-shadow .3s;}
+    .review-card.is-visible{opacity:1;transform:translateY(0);}
+    .review-card:nth-child(1){transition-delay:.1s} .review-card:nth-child(2){transition-delay:.2s} .review-card:nth-child(3){transition-delay:.3s}
+    .review-card:hover{transform:translateY(-8px);box-shadow:0 20px 40px rgba(0,0,0,.3);}
+    body.dark-theme .review-card{background:#2A3C50;border-color:#4A5C70;}
+    .stars{color:#FFD700;font-size:1.3em;margin-bottom:12px;letter-spacing:3px;}
+    .review-text{font-family:'Inter',sans-serif;font-size:1.05em;color:#555;line-height:1.7;margin-bottom:20px;font-style:italic;}
+    body.dark-theme .review-text{color:#E0E0E0;}
+    .reviewer{display:flex;align-items:center;gap:12px;}
+    .reviewer-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#ADD8E6,#1A2B40);display:flex;align-items:center;justify-content:center;font-family:'Poppins',sans-serif;font-weight:700;color:#FFD700;font-size:1em;}
+    .reviewer-name{font-family:'Poppins',sans-serif;font-weight:600;font-size:.95em;color:#1A2B40;}
+    body.dark-theme .reviewer-name{color:#F8F8F8;}
+    .reviewer-role{font-family:'Inter',sans-serif;font-size:.8em;color:#888;}
+
+    @media(max-width:768px){
+      .overview-grid{grid-template-columns:1fr;} .mv-grid{grid-template-columns:1fr;}
+      .stats-row{gap:20px;} .stat-box{padding:20px 25px;}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="character-blob blob-1"></div>
+  <div class="character-blob blob-2"></div>
+  <div class="character-blob blob-3"></div>
+  <div class="header-blob blob-4"></div>
+  <div class="header-blob blob-5"></div>
+
+  <div id="header-placeholder"></div>
+
+  <div class="page-hero">
+    <h1><i class="fas fa-star"></i> About Snow Tech</h1>
+    <p>Where creativity meets technology — discover our story, mission, and the people behind Snow Tech.</p>
+  </div>
+
+  <!-- OVERVIEW -->
+  <section class="about-section" id="overview">
+    <h2 class="section-title">Academy Overview</h2>
+    <div class="overview-grid">
+      <div class="overview-text">
+        <h2>Who We Are</h2>
+        <p>Snow Tech is a creative learning academy founded to bridge the gap between traditional education and the rapidly evolving digital creative industry. We believe every learner deserves world-class guidance — regardless of background.</p>
+        <p>Since our founding, we have trained thousands of students across Tamil Nadu, helping them launch careers in digital art, animation, UI/UX, web development, and more.</p>
+        <p>Our classrooms are vibrant, our instructors are industry veterans, and our curriculum is updated every semester to reflect real industry demands.</p>
+      </div>
+      <div class="overview-img-placeholder">🏫</div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="about-section alt" style="padding-top:50px">
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-number">2,400+</div><div class="stat-label">Students Trained</div></div>
+      <div class="stat-box"><div class="stat-number">12+</div><div class="stat-label">Programs Offered</div></div>
+      <div class="stat-box"><div class="stat-number">10</div><div class="stat-label">Branches Across TN</div></div>
+      <div class="stat-box"><div class="stat-number">98%</div><div class="stat-label">Satisfaction Rate</div></div>
+    </div>
+  </section>
+
+  <!-- MISSION & VISION -->
+  <section class="about-section" id="mission">
+    <h2 class="section-title">Mission &amp; Vision</h2>
+    <div class="mv-grid">
+      <div class="mv-card">
+        <div class="mv-icon">🎯</div>
+        <h3>Our Mission</h3>
+        <p>To empower every student with the creative and technical skills needed to thrive in the digital economy — through hands-on, industry-aligned education that is accessible and inspiring.</p>
+      </div>
+      <div class="mv-card">
+        <div class="mv-icon">🔭</div>
+        <h3>Our Vision</h3>
+        <p>To become South India's most respected creative technology academy — a place where imagination meets innovation, and every student graduates with a portfolio they are proud of.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PILLARS -->
+  <section class="about-section alt" id="pillars">
+    <h2 class="section-title">Our Pillars</h2>
+    <div class="pillars-grid">
+      <div class="pillar-box"><div class="p-icon">🏆</div><h3>Excellence</h3><p>We hold ourselves to the highest standards — in teaching, curriculum, and student outcomes.</p></div>
+      <div class="pillar-box"><div class="p-icon">🤝</div><h3>Community</h3><p>A supportive network of students, mentors, and industry partners who grow together.</p></div>
+      <div class="pillar-box"><div class="p-icon">💡</div><h3>Innovation</h3><p>Always evolving. Our curriculum tracks industry trends so you learn what employers actually need.</p></div>
+      <div class="pillar-box"><div class="p-icon">❤️</div><h3>Passion</h3><p>We love what we do — and that energy flows into every class, project, and student interaction.</p></div>
+      <div class="pillar-box"><div class="p-icon">🌍</div><h3>Inclusion</h3><p>Every background, every skill level — Snow Tech is a place where everyone belongs and can succeed.</p></div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="about-section" id="gallery">
+    <h2 class="section-title">Gallery</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item"><div>🎨</div></div>
+      <div class="gallery-item"><div>🖥️</div></div>
+      <div class="gallery-item"><div>🎬</div></div>
+      <div class="gallery-item"><div>🎮</div></div>
+      <div class="gallery-item"><div>✏️</div></div>
+      <div class="gallery-item"><div>🏫</div></div>
+      <div class="gallery-item"><div>🎓</div></div>
+      <div class="gallery-item"><div>🌟</div></div>
+    </div>
+    <p style="font-family:'Inter',sans-serif;color:#888;margin-top:20px;font-size:.9em;">Replace emoji placeholders with real images by swapping the inner &lt;div&gt; with &lt;img&gt; tags.</p>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="about-section alt" id="reviews">
+    <h2 class="section-title">Student Reviews</h2>
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p class="review-text">"Snow Tech completely changed how I think about design. The mentors pushed me beyond my comfort zone and I landed my first job within 2 months of graduating."</p>
+        <div class="reviewer"><div class="reviewer-avatar">AK</div><div><div class="reviewer-name">Arun Kumar</div><div class="reviewer-role">UI/UX Designer @ Startix</div></div></div>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p class="review-text">"In 6 months I went from zero to landing a full-time animation role. The curriculum is genuinely world-class and the instructors are always available to help."</p>
+        <div class="reviewer"><div class="reviewer-avatar">PS</div><div><div class="reviewer-name">Priya Sundaram</div><div class="reviewer-role">Motion Designer @ Pixelwave</div></div></div>
+      </div>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p class="review-text">"The community alone is worth it. I've made lifelong connections and found my first three freelance clients through the Snow Tech alumni network."</p>
+        <div class="reviewer"><div class="reviewer-avatar">RV</div><div><div class="reviewer-name">Rohan Verma</div><div class="reviewer-role">Freelance Illustrator</div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+  <script src="shared.js"></script>
+  <script>
+    const io = new IntersectionObserver(entries => entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+    }), { threshold: 0.1 });
+    document.querySelectorAll('.stat-box,.mv-card,.pillar-box,.gallery-item,.review-card').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
